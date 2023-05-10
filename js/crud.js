@@ -1,17 +1,45 @@
+let tasks = [];
+
 save.addEventListener("click", () => {
-  const title = document.querySelector("#title").value;
-  const idProduct = document.querySelector("#idProduct").value;
-  const deadline = document.querySelector("#deadline").value;
-  const category = document.querySelector("#category").value;
+  const modal = bootstrap.Modal.getInstance(
+    document.querySelector("#exampleModal")
+  );
+  const title = document.querySelector("#title");
+  const deadline = document.querySelector("#deadline");
+  const category = document.querySelector("#category");
 
   const task = {
-    title,
-    idProduct,
-    deadline,
-    category,
+    title: title.value,
+    deadline: deadline.value,
+    category: category.value,
+    completed: false,
   };
 
+  if (task.title.length == 0) {
+    title.classList.add("is-invalid");
+    return;
+  }
+
+  if (task.deadline.length == 0) {
+    deadline.classList.add("is-invalid");
+    return;
+  }
+
   document.querySelector("#tasks").innerHTML += createCard(task);
+
+  tasks.push(task);
+
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+
+  modal.hide();
+});
+
+window.addEventListener("load", () => {
+  const tasks = JSON.parse(localStorage.getItem("tasks"));
+
+  tasks.forEach((task) => {
+    document.querySelector("#tasks").innerHTML += createCard(task);
+  });
 });
 
 function removeCard(botao) {
@@ -36,11 +64,10 @@ function createCard(task) {
       break;
   }
   return `
-    <div class="col-12 col-md-6 col-lg-3">
-      <div class="card text-center mb-3" style="width: 18rem">
+    <div class="col-12 col-md-6 col-lg-3 mt-1">
+      <div class="card text-center mb-3" style="width: 14rem">
         <div class="card-body">
           <h5 class="card-title">${task.title}</h5>
-          <p class="card-text">${task.idProduct}</p>
           <p><span class="badge text-bg-${
             task.category == "Periferico"
               ? "info"

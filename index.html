@@ -54,7 +54,13 @@
                 <li><a class="dropdown-item" href="#">Concluídos</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
-                  <a class="dropdown-item" href="#">Cadastrar</a>
+                  <a
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                    href="#"
+                    >Cadastrar</a
+                  >
                 </li>
               </ul>
             </li>
@@ -78,7 +84,7 @@
       <!-- Button trigger modal -->
       <button
         type="button"
-        class="btn btn-primary"
+        class="btn btn-primary m-2"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
@@ -113,22 +119,13 @@
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col-12">
+              <div class="col-12 mb-1">
                 <input
                   id="title"
                   type="text"
                   class="form-control"
                   placeholder="Produto"
                   aria-label="produto"
-                />
-              </div>
-              <div class="col-12">
-                <input
-                  id="idProduct"
-                  type="text"
-                  class="form-control"
-                  placeholder="Código do Produto"
-                  aria-label="codigoProduto"
                 />
               </div>
               <div class="col-6">
