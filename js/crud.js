@@ -1,5 +1,3 @@
-let tasks = [];
-
 save.addEventListener("click", () => {
   const modal = bootstrap.Modal.getInstance(
     document.querySelector("#exampleModal")
@@ -9,6 +7,7 @@ save.addEventListener("click", () => {
   const category = document.querySelector("#category");
 
   const task = {
+    id: Date.now(),
     title: title.value,
     deadline: deadline.value,
     category: category.value,
@@ -25,7 +24,7 @@ save.addEventListener("click", () => {
     return;
   }
 
-  document.querySelector("#tasks").innerHTML += createCard(task);
+  document.querySelector("#tasks").innerHTML += createTask(task);
 
   tasks.push(task);
 
@@ -35,18 +34,67 @@ save.addEventListener("click", () => {
 });
 
 window.addEventListener("load", () => {
-  const tasks = JSON.parse(localStorage.getItem("tasks"));
+  tasks = getTasks();
 
-  tasks.forEach((task) => {
-    document.querySelector("#tasks").innerHTML += createCard(task);
-  });
+  update();
 });
 
-function removeCard(botao) {
-  botao.parentNode.parentNode.parentNode.remove();
+document.querySelector("#search").addEventListener("keyup", () => {
+  tasks = getTasks();
+  const titleSearched = document.querySelector("#search").value;
+
+  tasks = tasks.filter((task) => task.title.includes(titleSearched));
+
+  update();
+});
+
+document.querySelector("#pending").addEventListener("click", () => {
+  tasks = getTasks();
+  tasks = tasks.filter((task) => !task.completed);
+
+  update();
+});
+
+document.querySelector("#completed").addEventListener("click", () => {
+  tasks = getTasks();
+  tasks = tasks.filter((task) => task.completed);
+
+  update();
+});
+
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function createCard(task) {
+function getTasks() {
+  tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  return tasks;
+}
+
+function update() {
+  document.querySelector("#tasks").innerHTML = "";
+
+  tasks.forEach((task) => {
+    // console.log("task: ", JSON.stringify(task));
+    document.querySelector("#tasks").innerHTML += createTask(task);
+  });
+}
+
+function removeTask(id) {
+  tasks = tasks.filter((task) => task.id !== id);
+
+  saveTasks();
+  update();
+}
+
+function completeTask(id) {
+  tasks.find((task) => (task.id == id ? (task.completed = true) : undefined));
+
+  saveTasks();
+  update();
+}
+
+function createTask(task) {
   switch (task.category) {
     case "1":
       task.category = "Hardware";
@@ -63,6 +111,7 @@ function createCard(task) {
     default:
       break;
   }
+  const disabled = task.completed ? "disabled" : "";
   return `
     <div class="col-12 col-md-6 col-lg-3 mt-1">
       <div class="card text-center mb-3" style="width: 14rem">
@@ -76,10 +125,14 @@ function createCard(task) {
               : "success"
           }">${task.category}</span></p>
           <p>${task.deadline} pts.</p>
-          <a href="#" onClick="removeCard(this)" class="btn btn-success"
+          <a href="#" onClick="completeTask(${
+            task.id
+          })" class="btn btn-success ${disabled}"
             ><i class="bi bi-check-lg"></i
           ></a>
-          <a href="#" onClick="removeCard(this)" class="btn btn-danger"><i class="bi bi-x-lg"></i></a>
+          <a href="#" onClick="removeTask(${
+            task.id
+          })" class="btn btn-danger"><i class="bi bi-x-lg"></i></a>
         </div>
       </div>
     </div>

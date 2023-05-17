@@ -50,8 +50,14 @@
                 Pedidos
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Pendentes</a></li>
-                <li><a class="dropdown-item" href="#">Concluídos</a></li>
+                <li>
+                  <a id="pending" class="dropdown-item" href="#">Pendentes</a>
+                </li>
+                <li>
+                  <a id="completed" class="dropdown-item" href="#"
+                    >Concluídos</a
+                  >
+                </li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
                   <a
@@ -67,6 +73,7 @@
           </ul>
           <form class="d-flex" role="search">
             <input
+              id="search"
               class="form-control me-2"
               type="search"
               placeholder="Buscar"
