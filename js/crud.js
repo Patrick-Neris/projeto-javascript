@@ -75,7 +75,6 @@ function update() {
   document.querySelector("#tasks").innerHTML = "";
 
   tasks.forEach((task) => {
-    // console.log("task: ", JSON.stringify(task));
     document.querySelector("#tasks").innerHTML += createTask(task);
   });
 }
